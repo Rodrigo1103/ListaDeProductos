@@ -5,6 +5,10 @@
  */
 package paquete;
 
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+
 /**
  *
  * @author Rodrigo
@@ -14,8 +18,10 @@ public class jfCargaP extends javax.swing.JFrame {
     /**
      * Creates new form jfCargaP
      */
+    private DefaultTableModel modelo=new DefaultTableModel(); 
     public jfCargaP() {
         initComponents();
+        armarCabecera();
     }
 
     /**
@@ -34,7 +40,7 @@ public class jfCargaP extends javax.swing.JFrame {
         jtNombre = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jtPrecio = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btAgregar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtbProductos = new javax.swing.JTable();
 
@@ -47,14 +53,18 @@ public class jfCargaP extends javax.swing.JFrame {
 
         jcCategoria.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jcCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Electro", "Alimentos", "Ropa" }));
-        jcCategoria.setSelectedIndex(1);
         jcCategoria.setToolTipText("");
 
         jLabel3.setText("Nombre");
 
         jLabel4.setText("Precio");
 
-        jButton1.setText("AGREGAR");
+        btAgregar.setText("AGREGAR");
+        btAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAgregarActionPerformed(evt);
+            }
+        });
 
         jtbProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -97,7 +107,7 @@ public class jfCargaP extends javax.swing.JFrame {
                         .addGap(77, 77, 77))))
             .addGroup(layout.createSequentialGroup()
                 .addGap(141, 141, 141)
-                .addComponent(jButton1))
+                .addComponent(btAgregar))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -120,7 +130,7 @@ public class jfCargaP extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(jtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(btAgregar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -128,6 +138,28 @@ public class jfCargaP extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAgregarActionPerformed
+        //
+        String categoria=(String)jcCategoria.getSelectedItem();
+        String nombre=jtNombre.getText();
+        double precio=0;
+        try{
+            precio=Double.parseDouble(jtPrecio.getText());
+        }catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(this, "Precio Incorrecto");
+            jtPrecio.requestFocus();
+            jtPrecio.setText("");
+        }
+        Object arr[]={nombre,categoria,precio};
+        if(nombre!=null&&precio!=0){
+            modelo.addRow(arr);
+            jtPrecio.setText("");
+            jtNombre.setText("");
+        }
+        
+        
+    }//GEN-LAST:event_btAgregarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -165,7 +197,7 @@ public class jfCargaP extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btAgregar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -176,4 +208,11 @@ public class jfCargaP extends javax.swing.JFrame {
     private javax.swing.JTextField jtPrecio;
     private javax.swing.JTable jtbProductos;
     // End of variables declaration//GEN-END:variables
+
+private void armarCabecera(){
+    modelo.addColumn("Nombre");
+    modelo.addColumn("Categoria");
+    modelo.addColumn("Precio");
+    jtbProductos.setModel(modelo);
+}
 }
